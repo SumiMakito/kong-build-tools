@@ -8,6 +8,10 @@ if [ "$RESTY_IMAGE_TAG" != "bionic" ] && [ "$RESTY_IMAGE_TAG" != "18.04" ] && [ 
     exit 0
 fi
 
+if uname -a | grep -qs -i darwin; then
+    exit 0
+fi
+
 sudo apt-get install -y \
     qemu \
     binfmt-support \
@@ -49,3 +53,6 @@ docker version
 docker buildx version
 
 export BUILDX=true
+
+command -v ssh-agent >/dev/null || ( sudo apt-get update -y && sudo apt-get install openssh-client -y )
+eval $(ssh-agent -s)
